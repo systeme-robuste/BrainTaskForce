@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainTaskForce - Maquette Solution</title>
+    <meta name="description" content="Maquette interactive de la solution collaborative IA Premium.">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --sky: #38bdf8;
+            --indigo: #818cf8;
+            --emerald: #10b981;
+            --slate-400: #94a3b8;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg); 
+            color: #e2e8f0; 
+            min-height: 100vh;
+            padding: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .container { max-width: 72rem; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 2.5rem; }
+
+        .gradient-text { 
+            background: linear-gradient(90deg, var(--sky), var(--indigo)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .subtitle { color: var(--slate-400); margin-top: 0.5rem; }
+
+        .grid { display: grid; gap: 1.5rem; }
+        @media (min-width: 900px) {
+            .grid { grid-template-columns: 1fr 2fr; }
+        }
+
+        .glass { 
+            background: rgba(30, 41, 59, 0.8); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title { 
+            font-size: 1rem; 
+            font-weight: 600; 
+            margin-bottom: 1rem; 
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--slate-700); 
+            padding-bottom: 0.5rem; 
+        }
+
+        .agent-row { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0.75rem; 
+            background: rgba(15, 23, 42, 0.6); 
+            border: 1px solid var(--slate-700); 
+            border-radius: 0.5rem; 
+            margin-bottom: 0.5rem; 
+        }
+
+        .agent-info { display: flex; align-items: center; }
+
+        .dot { 
+            width: 0.5rem; 
+            height: 0.5rem; 
+            border-radius: 50%; 
+            margin-right: 0.75rem; 
+            animation: pulse 2s infinite; 
+        }
+
+        .dot-green { background: var(--emerald); }
+        .dot-sky { background: var(--sky); }
+        .dot-yellow { background: #f59e0b; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .badge { 
+            font-size: 0.7rem; 
+            padding: 0.2rem 0.5rem; 
+            border-radius: 0.25rem; 
+        }
+        .badge-sky { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; }
+        .badge-indigo { background: rgba(129, 140, 248, 0.15); color: #a5b4fc; }
+        .badge-white { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .badge-pink { background: rgba(236, 72, 153, 0.15); color: #f9a8d4; }
+
+        .data-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.875rem; }
+        .data-label { color: var(--slate-400); }
+        .data-val-green { color: var(--emerald); }
+
+        .cta-block { 
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1)); 
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .cta-label { color: var(--sky); font-weight: 600; font-size: 0.9rem; }
+        .cta-sub { color: var(--slate-400); font-size: 0.75rem; margin-top: 0.25rem; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: var(--slate-800); padding: 0.6rem 0.8rem; text-align: left; color: var(--slate-400); font-weight: 600; }
+        td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--slate-700); }
+        td.active { color: var(--emerald); }
+        td.mono { font-family: monospace; color: #7dd3fc; font-size: 0.75rem; }
+
+        .terminal-box { 
+            background: #000; 
+            color: var(--emerald); 
+            padding: 1rem; 
+            border-radius: 0.5rem; 
+            font-family: monospace; 
+            font-size: 0.75rem;
+            border: 1px solid var(--slate-700);
+            min-height: 180px;
+        }
+
+        .tline { display: block; overflow: hidden; white-space: nowrap; width: 0; margin-bottom: 0.3rem; }
+        .t1 { animation: typing 1.5s steps(50) 0.5s forwards; }
+        .t2 { animation: typing 1.5s steps(50) 2s forwards; }
+        .t3 { animation: typing 1.5s steps(50) 3.5s forwards; }
+        .t4 { animation: typing 1.5s steps(50) 5s forwards; color: var(--sky); }
+        .t5 { animation: typing 1.5s steps(50) 6.5s forwards; color: var(--emerald); }
+        .t6 { animation: typing 1.5s steps(50) 8s forwards; color: #94a3b8; }
+
+        @keyframes typing { to { width: 100%; } }
+
+        .cursor { 
+            display: inline-block; 
+            width: 8px; 
+            height: 14px; 
+            background: var(--emerald); 
+            animation: blink 1s step-end infinite; 
+            vertical-align: middle;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .stack-row { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0.5rem; 
+            margin-top: 0.75rem; 
+        }
+
+        .stack-badge { 
+            padding: 0.3rem 0.7rem; 
+            border-radius: 9999px; 
+            font-size: 0.7rem; 
+            font-weight: 600; 
+            border: 1px solid; 
+        }
+        .sb-node { color: #6ee7b7; border-color: #6ee7b7; background: rgba(110, 231, 183, 0.1); }
+        .sb-pg { color: #93c5fd; border-color: #93c5fd; background: rgba(147, 197, 253, 0.1); }
+        .sb-redis { color: #fca5a5; border-color: #fca5a5; background: rgba(252, 165, 165, 0.1); }
+        .sb-bullmq { color: #fcd34d; border-color: #fcd34d; background: rgba(252, 211, 77, 0.1); }
+        .sb-docker { color: #a5b4fc; border-color: #a5b4fc; background: rgba(165, 180, 252, 0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="gradient-text">BrainTaskForce Dashboard</div>
+            <p class="subtitle">Maquette visuelle de la solution collaborative IA Premium</p>
+        </div>
+
+        <div class="grid">
+            <!-- Left Column -->
+            <div>
+                <div class="glass">
+                    <div class="section-title">Task Force Agents</div>
+                    <div class="agent-row">
+                        <div class="agent-info"><div class="dot dot-sky"></div><span>@TopicTchat_bot</span></div>
+                        <span class="badge badge-white">Lead Dev / QA</span>
+                    </div>
+                    <div class="agent-row">
+                        <div class="agent-info"><div class="dot dot-green"></div><span>@chatgpt_gidbot</span></div>
+                        <span class="badge badge-sky">Architect</span>
+                    </div>
+                    <div class="agent-row">
+                        <div class="agent-info"><div class="dot dot-green"></div><span>@deepseek_gidbot</span></div>
+                        <span class="badge badge-indigo">Builder</span>
+                    </div>
+                    <div class="agent-row">
+                        <div class="agent-info"><div class="dot dot-yellow"></div><span>@mira</span></div>
+                        <span class="badge badge-pink">UX / Equilibre</span>
+                    </div>
+                </div>
+
+                <div class="glass">
+                    <div class="section-title">Session Courante</div>
+                    <div class="data-row"><span class="data-label">Session ID</span><span>df7a...b8c2</span></div>
+                    <div class="data-row"><span class="data-label">Provider</span><span>openai</span></div>
+                    <div class="data-row"><span class="data-label">Model</span><span>gpt-4o</span></div>
+                    <div class="data-row"><span class="data-label">Policy</span><span class="data-val-green">Explore-then-Exploit</span></div>
+                    <div class="data-row"><span class="data-label">Tokens</span><span>12,450 utilisés</span></div>
+                    <div class="data-row"><span class="data-label">Status</span><span class="data-val-green">En ligne</span></div>
+
+                    <div class="cta-block">
+                        <div class="cta-label">Veille Automatique Active</div>
+                        <div class="cta-sub">Prochain cycle dans 3h · BullMQ Worker</div>
+                    </div>
+                </div>
+
+                <div class="glass">
+                    <div class="section-title">Stack Technique</div>
+                    <div class="stack-row">
+                        <span class="stack-badge sb-node">Node.js</span>
+                        <span class="stack-badge sb-pg">PostgreSQL</span>
+                        <span class="stack-badge sb-redis">Redis</span>
+                        <span class="stack-badge sb-bullmq">BullMQ</span>
+                        <span class="stack-badge sb-docker">Docker</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <div class="glass">
+                    <div class="section-title">Table ai_sessions — Vue en Temps Réel</div>
+                    <table>
+                        <thead>
+                            <tr><th>Provider</th><th>Model</th><th>Policy</th><th>Tokens</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>openai</td>
+                                <td>gpt-4o</td>
+                                <td class="mono">explore-then-exploit</td>
+                                <td>12,450</td>
+                                <td class="active">ACTIVE</td>
+                            </tr>
+                            <tr>
+                                <td>deepseek</td>
+                                <td>coder-v2</td>
+                                <td class="mono">strict</td>
+                                <td>8,203</td>
+                                <td class="active">ACTIVE</td>
+                            </tr>
+                            <tr>
+                                <td>local</td>
+                                <td>mistral-7b</td>
+                                <td class="mono">balanced</td>
+                                <td>0</td>
+                                <td style="color: #f59e0b;">STANDBY</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="glass">
+                    <div class="section-title">Console BullMQ Worker</div>
+                    <div class="terminal-box">
+                        <span class="tline t1">[System] BrainTaskForce cluster v1.0 initialized.</span>
+                        <span class="tline t2">[Redis] Connected to redis://localhost:6379</span>
+                        <span class="tline t3">[BullMQ] Queue 'ai-generation' is now listening...</span>
+                        <span class="tline t4">[Job #842] Received: topic="Autonomie IA"</span>
+                        <span class="tline t5">[Job #842] Content generated. Post published. ✓</span>
+                        <span class="tline t6">[System] Next job scheduled in 3h.</span>
+                        <span class="cursor"></span>
+                    </div>
+                </div>
+
+                <div class="glass">
+                    <div class="section-title">Architecture (ai_sessions Schema)</div>
+                    <pre style="font-family: monospace; font-size: 0.72rem; color: #7dd3fc; background: #000; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; border: 1px solid #334155;">CREATE TABLE ai_sessions (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id     UUID REFERENCES users(id),
+  provider    VARCHAR(20) NOT NULL,
+  model       VARCHAR(100),
+  settings    JSONB DEFAULT '{}',
+  tokens_used BIGINT DEFAULT 0,
+  is_active   BOOLEAN DEFAULT true,
+  expires_at  TIMESTAMP,
+  created_at  TIMESTAMP DEFAULT NOW()
+);</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
